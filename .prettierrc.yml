@@ -1,0 +1,28 @@
+# Запускать командой: npx prettier --config ./.prettierrc.yml --write src/**/*.ts
+proseWrap: always
+printWidth: 80
+tabWidth: 2
+singleQuote: true
+trailingComma: all
+bracketSpacing: true
+jsxBracketSameLine: false
+semi: true
+useTabs: false
+arrowParens: avoid
+parser: babylon
+overrides:
+- files:
+  - '*.ts'
+  - '*.tsx'
+  options:
+    parser: typescript
+- files: '*.md'
+  options:
+    parser: markdown
+- files: '*.json'
+  options:
+    parser: json
+    printWidth: 80
+- files: '*.pcss'
+  options:
+    parser: css
