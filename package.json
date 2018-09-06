@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "classnames": "^2.2.6",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-scripts-ts": "2.17.0"
+    "react-redux": "^5.0.7",
+    "react-redux-toastr": "git+https://github.com/taksenov/react-redux-toastr.git",
+    "react-scripts-ts": "2.17.0",
+    "redux": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -14,10 +18,23 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "4.0.0-alpha.16",
+    "@storybook/addon-knobs": "4.0.0-alpha.16",
+    "@storybook/addon-links": "4.0.0-alpha.16",
+    "@storybook/addon-notes": "4.0.0-alpha.16",
+    "@storybook/addons": "4.0.0-alpha.16",
+    "@storybook/react": "4.0.0-alpha.16",
     "@types/jest": "^23.3.1",
     "@types/node": "^10.9.4",
     "@types/react": "^16.4.13",
     "@types/react-dom": "^16.0.7",
+    "@types/react-redux-toastr": "^7.1.1",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-csso": "^3.0.0",
+    "postcss-focus": "^3.0.0",
+    "postcss-loader": "^3.0.0",
+    "postcss-reporter": "^6.0.0",
+    "tslint-config-airbnb": "^5.11.0",
     "typescript": "^3.0.3"
   }
 }

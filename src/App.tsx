@@ -1,19 +1,50 @@
 import * as React from 'react';
-import './App.css';
-
-import logo from './logo.svg';
+import GroupItem from './GroupItem';
+// react-redux-toastr connected to provide user feedback.
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+import ReduxToastr from 'react-redux-toastr';
 
 class App extends React.Component {
   public render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRight: '1px solid #c1c1c1',
+          borderBottom: '1px solid #c1c1c1',
+          backgroundImage: 'linear-gradient(to bottom, #6675f8, #29a1fd)',
+        }}
+      >
+        <div
+          style={{
+            height: '40px',
+          }}
+        />
+        <GroupItem itemInitialState={'USUAL'} initialValue={'1 Заголовок'} />
+        <GroupItem itemInitialState={'USUAL'} initialValue={'2 Заголовок'} />
+        <GroupItem itemInitialState={'USUAL'} initialValue={'3 Заголовок'} />
+        <GroupItem itemInitialState={'USUAL'} initialValue={'4 Заголовок'} />
+        <GroupItem
+          itemInitialState={'USUAL'}
+          initialValue={'Это длинное сообщение из сорока двух и более символов'}
+        />
+        <GroupItem
+          itemInitialState={'INITIAL'}
+          initialValue={'Все что угодно, все равно проигнорируется'}
+        />
+
+        {/* react-redux-toastr connected to provide user feedback. */}
+        <ReduxToastr
+          timeOut={3000}
+          newestOnTop={false}
+          preventDuplicates
+          position="bottom-right"
+          transitionIn="fadeIn"
+          transitionOut="fadeOut"
+          progressBar
+        />
+        {/* react-redux-toastr connected to provide user feedback. */}
       </div>
     );
   }

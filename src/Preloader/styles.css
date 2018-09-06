@@ -1,0 +1,28 @@
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  margin: auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 0.8em solid rgb(80, 183, 255);
+  border-right: 0.8em solid rgb(80, 183, 255);
+  border-bottom: 0.8em solid rgb(80, 183, 255);
+  border-left: 0.8em solid rgb(62, 147, 253);
+  transform: translateZ(0);
+  animation: load 1.1s infinite linear;
+}
+
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: 5em;
+  height: 5em;
+}
