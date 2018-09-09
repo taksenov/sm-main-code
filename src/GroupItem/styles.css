@@ -49,19 +49,23 @@
 }
 
 .itemActions .archive {
-  display: none;
+  display: flex;
+  opacity: .3;
 }
 
 .itemActions .edit {
-  display: none;
+  display: flex;
+  opacity: .3;
 }
 
 .isHover .archive {
   display: flex;
+  opacity: 1;
 }
 
 .isHover .edit {
   display: flex;
+  opacity: 1;
 }
 
 .isInitial .archive {

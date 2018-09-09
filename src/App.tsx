@@ -1,18 +1,18 @@
 import * as React from 'react';
 import GroupItem from './GroupItem';
 // react-redux-toastr connected to provide user feedback.
-import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
-import ReduxToastr from 'react-redux-toastr';
+// import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+// import ReduxToastr from 'react-redux-toastr';
 
 class App extends React.Component {
   public render() {
     return (
       <div
         style={{
-          width: '100%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          width: '900px',
           height: '100%',
-          borderRight: '1px solid #c1c1c1',
-          borderBottom: '1px solid #c1c1c1',
           backgroundImage: 'linear-gradient(to bottom, #6675f8, #29a1fd)',
         }}
       >
@@ -35,7 +35,7 @@ class App extends React.Component {
         />
 
         {/* react-redux-toastr connected to provide user feedback. */}
-        <ReduxToastr
+        {/* <ReduxToastr
           timeOut={3000}
           newestOnTop={false}
           preventDuplicates
@@ -43,7 +43,7 @@ class App extends React.Component {
           transitionIn="fadeIn"
           transitionOut="fadeOut"
           progressBar
-        />
+        /> */}
         {/* react-redux-toastr connected to provide user feedback. */}
       </div>
     );

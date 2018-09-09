@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { toastr } from 'react-redux-toastr';
+import * as cx from 'classnames';
 
 import { Preloader } from '../Preloader';
 
-const cx = require('classnames');
-// const styles = require('./css');
 import './styles.css';
+
 const penWhite = require('./assets/images/penWhite.svg');
-const archiveWhite = require('./assets/images/archiveWhite.svg');
 const arrow = require('./assets/images/arrow.svg');
 const arrowClose = require('./assets/images/arrowClose.svg');
 const initialState = {
@@ -390,14 +388,7 @@ export default class GroupItem extends React.Component<
     const { value } = this.state.machine;
 
     if (e.keyCode === 13) {
-      if (e.target.value === '') {
-        toastr.warningWithoutIcon(
-          'Внимание!',
-          'Название группы не может быть пустым',
-          {},
-        );
-        return;
-      }
+      if (e.target.value === '') return;
 
       this.onSave(e.target.value);
     } else if (e.keyCode === 27) {
@@ -408,7 +399,7 @@ export default class GroupItem extends React.Component<
   onSave = valueToSave => {
     this.goToState(GroupItemType.SAVE, null);
 
-    // TODO: Works with save data imitation. Use sagas and API here
+    // IDEA: Works with save data imitation.
     setTimeout(() => {
       const { isAccordeonOpen } = this.state.machine;
 
@@ -510,14 +501,13 @@ export default class GroupItem extends React.Component<
               </div>
             )}
           </div>
-          <div className={cx('itemActions', isHover && 'isHover')}>
-            <div className={'archive'}>
-              <img src={archiveWhite} alt="Archive" width={24} />
+          {!isInitial && (
+            <div className={cx('itemActions', isHover && 'isHover')}>
+              <div className={'edit'} onClick={this.handleClickEdit}>
+                <img src={penWhite} alt="Edit" width={24} />
+              </div>
             </div>
-            <div className={'edit'} onClick={this.handleClickEdit}>
-              <img src={penWhite} alt="Edit" width={24} />
-            </div>
-          </div>
+          )}
         </div>
       );
     }
