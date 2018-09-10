@@ -1,26 +1,13 @@
 import * as React from 'react';
-import * as cx from 'classnames';
 
+import { GroupItemType, initialState } from './constants';
+import generateState from './fsmGroupItem';
+import AccordeonSwitcher from '../AccordeonSwitcher';
+import AddNewLabel from '../AddNewLabel';
+import EditButton from '../EditButton';
 import { Preloader } from '../Preloader';
 
 import './styles.css';
-
-const penWhite = require('./assets/images/penWhite.svg');
-const arrow = require('./assets/images/arrow.svg');
-const arrowClose = require('./assets/images/arrowClose.svg');
-const initialState = {
-  isProcessing: false,
-  isEdit: false,
-  isHover: false,
-  isUsual: false,
-  isInitial: false,
-  isAccordeonOpen: false,
-  isAddNew: false,
-  error: null,
-  value: null,
-  editValue: null,
-};
-const MAX_SYMBOLS_IN_NAME = 42;
 
 interface IGroupItemProps {
   itemInitialState: string;
@@ -44,21 +31,9 @@ interface IGroupItemState {
   timer: any;
 }
 
-const enum GroupItemType {
-  USUAL = 'USUAL',
-  USUAL_ACCORDEON_OPEN = 'USUAL_ACCORDEON_OPEN',
-  HOVER = 'HOVER',
-  HOVER_ACCORDEON_OPEN = 'HOVER_ACCORDEON_OPEN',
-  SAVE = 'SAVE',
-  INITIAL = 'INITIAL',
-  EDIT = 'EDIT',
-  ADD = 'ADD',
-  ERROR = 'ERROR',
-}
-
 /**
  * This component use state machine in this.state,
- * for the change visualization of Quest's Group Item.
+ * for the change visualization of Accordeon's Group Item.
  *
  * For change item use this states:
  *
@@ -93,11 +68,7 @@ export default class GroupItem extends React.Component<
   constructor(props) {
     super(props);
 
-    this.state = {
-      name: GroupItemType.USUAL,
-      machine: this.generateState(GroupItemType.USUAL, this.props.initialValue),
-      timer: null,
-    };
+    this.state = { name: null, machine: { ...initialState }, timer: null };
   }
 
   componentDidMount() {
@@ -109,146 +80,8 @@ export default class GroupItem extends React.Component<
   /**
    * State machine binding
    */
-  generateState = (stateName, stateParam) => {
-    const previousState = this.state
-      ? { ...this.state.machine }
-      : { ...initialState };
-    let stateParamNormalLength = stateParam || '';
-
-    if (stateParamNormalLength.length > MAX_SYMBOLS_IN_NAME) {
-      stateParamNormalLength = stateParamNormalLength.substr(
-        0,
-        MAX_SYMBOLS_IN_NAME,
-      );
-    }
-
-    switch (stateName) {
-      case GroupItemType.USUAL:
-        return {
-          isProcessing: false,
-          isEdit: false,
-          isHover: false,
-          isUsual: true,
-          isInitial: false,
-          isAccordeonOpen: false,
-          isAddNew: false,
-          error: null,
-          value: stateParamNormalLength || previousState.value,
-          editValue: null,
-        };
-      case GroupItemType.USUAL_ACCORDEON_OPEN:
-        return {
-          isProcessing: false,
-          isEdit: false,
-          isHover: false,
-          isUsual: true,
-          isInitial: false,
-          isAccordeonOpen: true,
-          isAddNew: false,
-          error: null,
-          value: stateParamNormalLength || previousState.value,
-          editValue: null,
-        };
-      case GroupItemType.HOVER:
-        return {
-          isProcessing: false,
-          isEdit: false,
-          isHover: true,
-          isUsual: false,
-          isInitial: false,
-          isAccordeonOpen: false,
-          isAddNew: false,
-          error: null,
-          value: stateParamNormalLength || previousState.value,
-          editValue: null,
-        };
-      case GroupItemType.HOVER_ACCORDEON_OPEN:
-        return {
-          isProcessing: false,
-          isEdit: false,
-          isHover: true,
-          isUsual: false,
-          isInitial: false,
-          isAccordeonOpen: true,
-          isAddNew: false,
-          error: null,
-          value: stateParamNormalLength || previousState.value,
-          editValue: null,
-        };
-      case GroupItemType.SAVE:
-        return {
-          isProcessing: true,
-          isEdit: true,
-          isHover: false,
-          isUsual: false,
-          isInitial: false,
-          isAccordeonOpen: previousState.isAccordeonOpen,
-          isAddNew: false,
-          error: null,
-          value: previousState.value,
-          editValue: previousState.editValue,
-        };
-      case GroupItemType.INITIAL:
-        return {
-          isProcessing: false,
-          isEdit: false,
-          isHover: false,
-          isUsual: false,
-          isInitial: true,
-          isAccordeonOpen: false,
-          isAddNew: false,
-          error: null,
-          value: '+ ДОБАВИТЬ НОВЫЙ ЗАГОЛОВОК',
-          editValue: null,
-        };
-      case GroupItemType.EDIT:
-        return {
-          isProcessing: false,
-          isEdit: true,
-          isHover: false,
-          isUsual: false,
-          isInitial: false,
-          isAccordeonOpen: previousState.isAccordeonOpen,
-          isAddNew: false,
-          error: null,
-          value: previousState.value,
-          editValue: stateParamNormalLength,
-        };
-      case GroupItemType.ADD:
-        return {
-          isProcessing: false,
-          isEdit: false,
-          isHover: false,
-          isUsual: false,
-          isInitial: false,
-          isAccordeonOpen: false,
-          isAddNew: true,
-          error: null,
-          value: previousState.value,
-          editValue: stateParamNormalLength,
-        };
-      // default state
-      default:
-        return {
-          isProcessing: false,
-          isEdit: false,
-          isHover: false,
-          isUsual: false,
-          isInitial: false,
-          isAccordeonOpen: false,
-          isAddNew: false,
-          error: null,
-          value: null,
-          editValue: null,
-        };
-    }
-  };
-
   goToState = (stateName, stateParam) => {
-    this.setState({
-      name: stateName,
-      machine: this.generateState(stateName, stateParam),
-    });
+    this.setState(generateState(this.state, this.props, stateName, stateParam));
   };
 
   // Transitions
@@ -448,31 +281,24 @@ export default class GroupItem extends React.Component<
           onClick={this.handleClickInitial}
         >
           <div className={'itemLabel'}>
+            {/* Label */}
             {isInitial && <div className={'text'}>{value}</div>}
             {isUsual && <div className={'text'}>{value}</div>}
             {isHover && <div className={'text'}>{value}</div>}
+            {/* Expand */}
             {isUsual && (
-              <div
-                className={'accordeonSwitcher'}
-                onClick={this.handleClickAccordeonOpen}
-              >
-                {!isAccordeonOpen && <img src={arrow} alt="Open" width={18} />}
-                {isAccordeonOpen && (
-                  <img src={arrowClose} alt="Close" width={18} />
-                )}
-              </div>
+              <AccordeonSwitcher
+                handleClickAccordeonOpen={this.handleClickAccordeonOpen}
+                isAccordeonOpen={isAccordeonOpen}
+              />
             )}
             {isHover && (
-              <div
-                className={'accordeonSwitcher'}
-                onClick={this.handleClickAccordeonOpen}
-              >
-                {!isAccordeonOpen && <img src={arrow} alt="Open" width={18} />}
-                {isAccordeonOpen && (
-                  <img src={arrowClose} alt="Close" width={18} />
-                )}
-              </div>
+              <AccordeonSwitcher
+                handleClickAccordeonOpen={this.handleClickAccordeonOpen}
+                isAccordeonOpen={isAccordeonOpen}
+              />
             )}
+            {/* Input */}
             {isEdit && (
               <input
                 className={'inputEdit'}
@@ -484,29 +310,21 @@ export default class GroupItem extends React.Component<
                 onFocus={this.handleOnFocusInput}
               />
             )}
+            {/* Add new label */}
             {isAddNew && (
-              <div>
-                <label className={'labelAddNew'}>
-                  Нажми Enter для подтверждения
-                </label>
-                <input
-                  className={cx('inputEdit', 'inputAddNew')}
-                  type="text"
-                  onChange={this.handleInputChange}
-                  onKeyDown={this.handleInputKeyDown}
-                  value={editValue}
-                  placeholder={'Введи название группы'}
-                  autoFocus={true}
-                />
-              </div>
+              <AddNewLabel
+                editValue={editValue}
+                handleInputChange={this.handleInputChange}
+                handleInputKeyDown={this.handleInputKeyDown}
+              />
             )}
           </div>
+          {/* Edit button */}
           {!isInitial && (
-            <div className={cx('itemActions', isHover && 'isHover')}>
-              <div className={'edit'} onClick={this.handleClickEdit}>
-                <img src={penWhite} alt="Edit" width={24} />
-              </div>
-            </div>
+            <EditButton
+              isHover={isHover}
+              handleClickEdit={this.handleClickEdit}
+            />
           )}
         </div>
       );

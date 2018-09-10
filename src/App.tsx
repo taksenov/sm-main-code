@@ -1,8 +1,5 @@
 import * as React from 'react';
-import GroupItem from './GroupItem';
-// react-redux-toastr connected to provide user feedback.
-// import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
-// import ReduxToastr from 'react-redux-toastr';
+import GroupItem from './components/GroupItem';
 
 class App extends React.Component {
   public render() {
@@ -33,18 +30,6 @@ class App extends React.Component {
           itemInitialState={'INITIAL'}
           initialValue={'Все что угодно, все равно проигнорируется'}
         />
-
-        {/* react-redux-toastr connected to provide user feedback. */}
-        {/* <ReduxToastr
-          timeOut={3000}
-          newestOnTop={false}
-          preventDuplicates
-          position="bottom-right"
-          transitionIn="fadeIn"
-          transitionOut="fadeOut"
-          progressBar
-        /> */}
-        {/* react-redux-toastr connected to provide user feedback. */}
       </div>
     );
   }
