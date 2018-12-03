@@ -5,7 +5,7 @@ import generateState from './fsmGroupItem';
 import AccordeonSwitcher from '../AccordeonSwitcher';
 import AddNewLabel from '../AddNewLabel';
 import EditButton from '../EditButton';
-import { Preloader } from '../Preloader';
+import Preloader from '../Preloader';
 
 import './styles.css';
 
