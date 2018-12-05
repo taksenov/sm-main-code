@@ -1,7 +1,14 @@
 import * as React from 'react';
 
 import { GroupItemType, initialState } from './constants';
+
 import generateState from './fsmGroupItem';
+
+import UsualState from './fsmBinding/UsualState';
+import UsualAccordeonOpenState from './fsmBinding/UsualAccordeonOpenState';
+import HoverState from './fsmBinding/HoverState';
+import HoverAccordeonOpenState from './fsmBinding/HoverAccordeonOpenState';
+
 import AccordeonSwitcher from '../AccordeonSwitcher';
 import AddNewLabel from '../AddNewLabel';
 import EditButton from '../EditButton';
@@ -9,12 +16,34 @@ import Preloader from '../Preloader';
 
 import './styles.css';
 
+// TODO: Need in future for currentState
+// inputs: {
+//   [GroupItemType.USUAL]: 0,
+//   [GroupItemType.USUAL_ACCORDEON_OPEN]: 1,
+//   [GroupItemType.HOVER]: 2,
+//   [GroupItemType.HOVER_ACCORDEON_OPEN]: 3,
+// },
+
 interface IGroupItemProps {
   itemInitialState: string;
   initialValue: string;
 }
 
 interface IGroupItemState {
+  currentState: number;
+  states: any;
+  inputs: {
+    ACCORDEON_OPEN: number;
+    HOVER: number;
+    UN_HOVER: number;
+    EDIT_LABEL: number;
+    SAVING: number;
+    SAVED_DONE: number;
+    SAVED_ERROR: number;
+    ADD_LABEL: number;
+  };
+  transitions: any;
+  // Old
   name: string;
   machine: {
     isProcessing: boolean;
@@ -68,7 +97,40 @@ export default class GroupItem extends React.Component<
   constructor(props) {
     super(props);
 
-    this.state = { name: null, machine: { ...initialState }, timer: null };
+    this.state = {
+      currentState: 0,
+      states: [
+        new UsualState(),
+        new UsualAccordeonOpenState(),
+        new HoverState(),
+        new HoverAccordeonOpenState(),
+      ],
+      inputs: {
+        ACCORDEON_OPEN: 0,
+        HOVER: 1,
+        UN_HOVER: 2,
+        EDIT_LABEL: 3,
+        SAVING: 4,
+        SAVED_DONE: 5,
+        SAVED_ERROR: 6,
+        ADD_LABEL: 7,
+      },
+      transitions: [
+        [1, 2, 0, 0, 0, 0, 0, 0],
+        [0, 3, 1, 1, 1, 1, 1, 1],
+        [3, 2, 0, 6, 2, 2, 2, 2],
+        [2, 3, 1, 6, 3, 3, 3, 3],
+        [4, 4, 4, 4, 4, 4, 8, 4],
+        [5, 5, 5, 5, 5, 0, 5, 7],
+        [6, 6, 6, 6, 4, 6, 6, 6],
+        [7, 7, 7, 7, 4, 7, 7, 7],
+        [8, 8, 8, 8, 8, 8, 8, 8],
+      ],
+      // Old
+      name: null,
+      machine: { ...initialState },
+      timer: null,
+    };
   }
 
   componentDidMount() {
@@ -83,6 +145,30 @@ export default class GroupItem extends React.Component<
   goToState = (stateName, stateParam) => {
     this.setState(generateState(this.state, this.props, stateName, stateParam));
   };
+
+  onAccordeonOpen = () => {
+    this.state.states[this.state.currentState].handleAccordeonOpen(this);
+  };
+
+  onHover = () => {
+    this.state.states[this.state.currentState].handleHover(this);
+  };
+
+  onUnHover = () => {
+    this.state.states[this.state.currentState].handleUnHover(this);
+  };
+
+  onEdit = () => {};
+
+  onAddNew = () => {};
+
+  onSave = () => {
+    this.state.states[this.state.currentState].handleSave(this);
+  };
+
+  onError = () => {};
+
+  onSaveDone = () => {};
 
   // Transitions
   transitionFromHoverAccordeonOpen = name => {
@@ -172,23 +258,23 @@ export default class GroupItem extends React.Component<
   };
   // State machine binding
 
-  handleHoverSet = () => {
-    const { isInitial } = this.state.machine;
-    const { name } = this.state;
+  // handleHoverSet = () => {
+  //   const { isInitial } = this.state.machine;
+  //   const { name } = this.state;
 
-    if (isInitial) return;
+  //   if (isInitial) return;
 
-    this.transitionFromUsual(name);
-  };
+  //   this.transitionFromUsual(name);
+  // };
 
-  handleHoverUnSet = () => {
-    const { isInitial } = this.state.machine;
-    const { name } = this.state;
+  // handleHoverUnSet = () => {
+  //   const { isInitial } = this.state.machine;
+  //   const { name } = this.state;
 
-    if (isInitial) return;
+  //   if (isInitial) return;
 
-    this.transitionFromHoverAccordeonClose(name);
-  };
+  //   this.transitionFromHoverAccordeonClose(name);
+  // };
 
   handleClickInitial = () => {
     const { isInitial } = this.state.machine;
@@ -204,11 +290,11 @@ export default class GroupItem extends React.Component<
     this.goToState(GroupItemType.EDIT, value);
   };
 
-  handleClickAccordeonOpen = () => {
-    const { name } = this.state;
+  // handleClickAccordeonOpen = () => {
+  //   const { name } = this.state;
 
-    this.transitionFromHoverAccordeonOpen(name);
-  };
+  //   this.transitionFromHoverAccordeonOpen(name);
+  // };
 
   handleInputChange = e => {
     const { name } = this.state;
@@ -229,20 +315,20 @@ export default class GroupItem extends React.Component<
     }
   };
 
-  onSave = valueToSave => {
-    this.goToState(GroupItemType.SAVE, null);
+  // onSave = valueToSave => {
+  //   this.goToState(GroupItemType.SAVE, null);
 
-    // IDEA: Works with save data imitation.
-    setTimeout(() => {
-      const { isAccordeonOpen } = this.state.machine;
+  //   // IDEA: Works with save data imitation.
+  //   setTimeout(() => {
+  //     const { isAccordeonOpen } = this.state.machine;
 
-      if (isAccordeonOpen) {
-        this.goToState(GroupItemType.USUAL_ACCORDEON_OPEN, valueToSave);
-      } else {
-        this.goToState(GroupItemType.USUAL, valueToSave);
-      }
-    }, 1500);
-  };
+  //     if (isAccordeonOpen) {
+  //       this.goToState(GroupItemType.USUAL_ACCORDEON_OPEN, valueToSave);
+  //     } else {
+  //       this.goToState(GroupItemType.USUAL, valueToSave);
+  //     }
+  //   }, 1500);
+  // };
 
   handleOnFocusInput = e => {
     const valueTemp = e.target.value;
@@ -263,6 +349,8 @@ export default class GroupItem extends React.Component<
       editValue,
     } = this.state.machine;
 
+    console.log('RENDER this.state =', this.state);
+
     if (isProcessing) {
       return (
         <div className={'wrapper'}>
@@ -276,8 +364,10 @@ export default class GroupItem extends React.Component<
       return (
         <div
           className={'wrapper'}
-          onMouseEnter={this.handleHoverSet}
-          onMouseLeave={this.handleHoverUnSet}
+          onMouseEnter={this.onHover}
+          // onMouseEnter={this.handleHoverSet}
+          onMouseLeave={this.onUnHover}
+          // onMouseLeave={this.handleHoverUnSet}
           onClick={this.handleClickInitial}
         >
           <div className={'itemLabel'}>
@@ -288,13 +378,15 @@ export default class GroupItem extends React.Component<
             {/* Expand */}
             {isUsual && (
               <AccordeonSwitcher
-                handleClickAccordeonOpen={this.handleClickAccordeonOpen}
+                handleClickAccordeonOpen={this.onAccordeonOpen}
+                // handleClickAccordeonOpen={this.handleClickAccordeonOpen}
                 isAccordeonOpen={isAccordeonOpen}
               />
             )}
             {isHover && (
               <AccordeonSwitcher
-                handleClickAccordeonOpen={this.handleClickAccordeonOpen}
+                handleClickAccordeonOpen={this.onAccordeonOpen}
+                // handleClickAccordeonOpen={this.handleClickAccordeonOpen}
                 isAccordeonOpen={isAccordeonOpen}
               />
             )}
