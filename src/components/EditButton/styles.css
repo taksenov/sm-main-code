@@ -1,0 +1,35 @@
+/* EditButton.GroupItem */
+/* Selectors */
+.itemActions {
+  display: flex;
+  flex: 0 1 64px;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.itemActions .archive {
+  margin-right: 16px;
+}
+
+.itemActions .archive {
+  display: flex;
+  opacity: .3;
+}
+
+.itemActions .edit {
+  display: flex;
+  opacity: .3;
+}
+
+.isHover .archive {
+  display: flex;
+  opacity: 1;
+}
+
+.isHover .edit {
+  display: flex;
+  opacity: 1;
+}
+
+/* ========= */

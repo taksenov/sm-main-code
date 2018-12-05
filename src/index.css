@@ -1,5 +1,21 @@
-body {
-  margin: 0;
-  padding: 0;
+html {
+  -webkit-font-smoothing: antialiased;
   font-family: sans-serif;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(to bottom, #6675f8, #29a1fd);
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
 }
