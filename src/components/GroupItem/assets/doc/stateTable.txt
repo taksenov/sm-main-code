@@ -20,6 +20,7 @@
 
 | States | Inputs                                                                                                                         |
 |        | Click to Acc open/close | Mouse enter | Mouse leave | Edit label | Saving | When saved done | When saved error | Add new label |
+|        | onAccordeonOpen         | onHover     | onUnHover   | onEdit     | onSave | onSaveDone      | onError          | onAddNew      |
 |--------|-------------------------|-------------|-------------|------------|--------|-----------------|------------------|---------------|
 | 0      | 1                       | 2           | 0           | 0          | 0      | 0               | 0                | 0             |
 | 1      | 0                       | 3           | 1           | 1          | 1      | 1               | 1                | 1             |

@@ -1,3 +1,5 @@
+import { GroupItemType } from '../constants';
+
 export default class UsualState {
   handleAccordeonOpen = accordeon => {
     const { name } = accordeon.state;
@@ -49,7 +51,26 @@ export default class UsualState {
 
   handleAddNew = accordeon => {};
 
-  handleSave = accordeon => {};
+  handleSave = (accordeon, valueToSave) => {
+    console.log('Im inside handleSave UsualState!');
+
+    accordeon.goToState(GroupItemType.SAVE, null);
+    // IDEA: Works with save data imitation.
+    setTimeout(() => {
+      const { isAccordeonOpen } = accordeon.state.machine;
+      if (isAccordeonOpen) {
+        accordeon.goToState(GroupItemType.USUAL_ACCORDEON_OPEN, valueToSave);
+      } else {
+        accordeon.goToState(GroupItemType.USUAL, valueToSave);
+      }
+    }, 1500);
+
+    const stateId = accordeon.state.currentState;
+    const inputId = accordeon.state.inputs.SAVING;
+    const currentState = accordeon.state.transitions[stateId][inputId];
+
+    accordeon.setState({ currentState });
+  };
 
   handleError = accordeon => {};
 

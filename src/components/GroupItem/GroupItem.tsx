@@ -8,6 +8,11 @@ import UsualState from './fsmBinding/UsualState';
 import UsualAccordeonOpenState from './fsmBinding/UsualAccordeonOpenState';
 import HoverState from './fsmBinding/HoverState';
 import HoverAccordeonOpenState from './fsmBinding/HoverAccordeonOpenState';
+import SaveState from './fsmBinding/SaveState';
+import InitialState from './fsmBinding/InitialState';
+import EditState from './fsmBinding/EditState';
+import AddState from './fsmBinding/AddState';
+import ErrorState from './fsmBinding/ErrorState';
 
 import AccordeonSwitcher from '../AccordeonSwitcher';
 import AddNewLabel from '../AddNewLabel';
@@ -104,6 +109,11 @@ export default class GroupItem extends React.Component<
         new UsualAccordeonOpenState(),
         new HoverState(),
         new HoverAccordeonOpenState(),
+        new SaveState(),
+        new InitialState(),
+        new EditState(),
+        new AddState(),
+        new ErrorState(),
       ],
       inputs: {
         ACCORDEON_OPEN: 0,
@@ -158,12 +168,14 @@ export default class GroupItem extends React.Component<
     this.state.states[this.state.currentState].handleUnHover(this);
   };
 
-  onEdit = () => {};
+  onEdit = () => {
+    this.state.states[this.state.currentState].handleSave(this, value);
+  };
 
   onAddNew = () => {};
 
-  onSave = () => {
-    this.state.states[this.state.currentState].handleSave(this);
+  onSave = value => {
+    this.state.states[this.state.currentState].handleSave(this, value);
   };
 
   onError = () => {};
@@ -314,21 +326,6 @@ export default class GroupItem extends React.Component<
       this.transitionEscapeFromInput(name, value);
     }
   };
-
-  // onSave = valueToSave => {
-  //   this.goToState(GroupItemType.SAVE, null);
-
-  //   // IDEA: Works with save data imitation.
-  //   setTimeout(() => {
-  //     const { isAccordeonOpen } = this.state.machine;
-
-  //     if (isAccordeonOpen) {
-  //       this.goToState(GroupItemType.USUAL_ACCORDEON_OPEN, valueToSave);
-  //     } else {
-  //       this.goToState(GroupItemType.USUAL, valueToSave);
-  //     }
-  //   }, 1500);
-  // };
 
   handleOnFocusInput = e => {
     const valueTemp = e.target.value;

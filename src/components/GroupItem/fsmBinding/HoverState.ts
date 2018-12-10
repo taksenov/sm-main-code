@@ -1,3 +1,5 @@
+import { GroupItemType } from '../constants';
+
 export default class HoverState {
   handleAccordeonOpen = accordeon => {
     const { name } = accordeon.state;
@@ -46,17 +48,25 @@ export default class HoverState {
 
   handleAddNew = accordeon => {};
 
-  handleSave = accordeon => {
-    // this.goToState(GroupItemType.SAVE, null);
-    // // IDEA: Works with save data imitation.
-    // setTimeout(() => {
-    //   const { isAccordeonOpen } = this.state.machine;
-    //   if (isAccordeonOpen) {
-    //     this.goToState(GroupItemType.USUAL_ACCORDEON_OPEN, valueToSave);
-    //   } else {
-    //     this.goToState(GroupItemType.USUAL, valueToSave);
-    //   }
-    // }, 1500);
+  handleSave = (accordeon, valueToSave) => {
+    console.log('Im inside handleSave HoverState!');
+
+    accordeon.goToState(GroupItemType.SAVE, null);
+    // IDEA: Works with save data imitation.
+    setTimeout(() => {
+      const { isAccordeonOpen } = accordeon.state.machine;
+      if (isAccordeonOpen) {
+        accordeon.goToState(GroupItemType.USUAL_ACCORDEON_OPEN, valueToSave);
+      } else {
+        accordeon.goToState(GroupItemType.USUAL, valueToSave);
+      }
+    }, 1500);
+
+    const stateId = accordeon.state.currentState;
+    const inputId = accordeon.state.inputs.SAVING;
+    const currentState = accordeon.state.transitions[stateId][inputId];
+
+    accordeon.setState({ currentState });
   };
 
   // onSave = valueToSave => {

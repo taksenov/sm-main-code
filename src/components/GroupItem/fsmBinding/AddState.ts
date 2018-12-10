@@ -1,6 +1,6 @@
 import { GroupItemType } from '../constants';
 
-export default class UsualAccordeonOpenState {
+export default class AddState {
   handleAccordeonOpen = accordeon => {
     const { name } = accordeon.state;
     accordeon.transitionFromHoverAccordeonOpen(name);
@@ -21,12 +21,13 @@ export default class UsualAccordeonOpenState {
 
     accordeon.transitionFromUsual(name);
 
-    // TODO: Use destructurization
     const stateId = accordeon.state.currentState;
     const inputId = accordeon.state.inputs.HOVER;
     const currentState = accordeon.state.transitions[stateId][inputId];
 
-    accordeon.setState({ currentState });
+    accordeon.setState({
+      currentState,
+    });
   };
 
   handleUnHover = accordeon => {
@@ -41,7 +42,9 @@ export default class UsualAccordeonOpenState {
     const inputId = accordeon.state.inputs.UN_HOVER;
     const currentState = accordeon.state.transitions[stateId][inputId];
 
-    accordeon.setState({ currentState });
+    accordeon.setState({
+      currentState,
+    });
   };
 
   handleEdit = accordeon => {};
@@ -49,7 +52,7 @@ export default class UsualAccordeonOpenState {
   handleAddNew = accordeon => {};
 
   handleSave = (accordeon, valueToSave) => {
-    console.log('Im inside handleSave UsualAccordeonOpenState!');
+    console.log('Im inside handleSave UsualState!');
 
     accordeon.goToState(GroupItemType.SAVE, null);
     // IDEA: Works with save data imitation.
@@ -88,14 +91,18 @@ export default class UsualAccordeonOpenState {
   //   const maxSongs = player.state.songs.length - 1;
   //   const currentSong = songId === maxSongs ? songId : ++songId;
 
-  //   player.setState({ currentSong: currentSong });
+  //   player.setState({
+  //     currentSong: currentSong,
+  //   });
   // }
 
   // handlePrevious(player) {
   //   let songId = player.state.currentSong;
   //   const currentSong = songId === 0 ? songId : --songId;
 
-  //   player.setState({ currentSong: currentSong });
+  //   player.setState({
+  //     currentSong: currentSong,
+  //   });
   // }
 
   // handleStop(player) {
