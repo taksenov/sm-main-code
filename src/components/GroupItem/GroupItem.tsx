@@ -168,11 +168,13 @@ export default class GroupItem extends React.Component<
     this.state.states[this.state.currentState].handleUnHover(this);
   };
 
-  onEdit = () => {
-    this.state.states[this.state.currentState].handleSave(this, value);
+  onEdit = value => {
+    this.state.states[this.state.currentState].handleEdit(this, value);
   };
 
-  onAddNew = () => {};
+  onAddNew = () => {
+    this.state.states[this.state.currentState].handleAddNew(this);
+  };
 
   onSave = value => {
     this.state.states[this.state.currentState].handleSave(this, value);
@@ -299,7 +301,8 @@ export default class GroupItem extends React.Component<
   handleClickEdit = () => {
     const { value } = this.state.machine;
 
-    this.goToState(GroupItemType.EDIT, value);
+    this.onEdit(value);
+    // this.goToState(GroupItemType.EDIT, value);
   };
 
   // handleClickAccordeonOpen = () => {

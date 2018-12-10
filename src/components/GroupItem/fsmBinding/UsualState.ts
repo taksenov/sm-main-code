@@ -47,7 +47,17 @@ export default class UsualState {
     });
   };
 
-  handleEdit = accordeon => {};
+  handleEdit = (accordeon, valueToSave) => {
+    accordeon.goToState(GroupItemType.EDIT, valueToSave);
+
+    const stateId = accordeon.state.currentState;
+    const inputId = accordeon.state.inputs.UN_HOVER;
+    const currentState = accordeon.state.transitions[stateId][inputId];
+
+    accordeon.setState({
+      currentState,
+    });
+  };
 
   handleAddNew = accordeon => {};
 
