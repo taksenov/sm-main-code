@@ -48,81 +48,77 @@ export default class UsualState {
   };
 
   handleEdit = (accordeon, valueToSave) => {
-    accordeon.goToState(GroupItemType.EDIT, valueToSave);
-
     const stateId = accordeon.state.currentState;
-    const inputId = accordeon.state.inputs.UN_HOVER;
+    const inputId = accordeon.state.inputs.EDIT_LABEL;
     const currentState = accordeon.state.transitions[stateId][inputId];
 
+    accordeon.goToState(GroupItemType.EDIT, valueToSave, currentState);
     accordeon.setState({
       currentState,
     });
   };
 
-  handleAddNew = accordeon => {};
-
-  handleSave = (accordeon, valueToSave) => {
-    console.log('Im inside handleSave UsualState!');
-
-    accordeon.goToState(GroupItemType.SAVE, null);
-    // IDEA: Works with save data imitation.
-    setTimeout(() => {
-      const { isAccordeonOpen } = accordeon.state.machine;
-      if (isAccordeonOpen) {
-        accordeon.goToState(GroupItemType.USUAL_ACCORDEON_OPEN, valueToSave);
-      } else {
-        accordeon.goToState(GroupItemType.USUAL, valueToSave);
-      }
-    }, 1500);
-
+  handleAddNew = accordeon => {
+    const { isInitial } = accordeon.state.machine;
     const stateId = accordeon.state.currentState;
-    const inputId = accordeon.state.inputs.SAVING;
+    const inputId = accordeon.state.inputs.ADD_LABEL;
     const currentState = accordeon.state.transitions[stateId][inputId];
+
+    if (!isInitial) return;
+
+    accordeon.goToState(GroupItemType.ADD, null, currentState);
 
     accordeon.setState({ currentState });
   };
 
-  handleError = accordeon => {};
+  handleSave = (accordeon, valueToSave) => {
+    let stateId = accordeon.state.currentState;
+    let inputId = accordeon.state.inputs.SAVING;
+    let currentState = accordeon.state.transitions[stateId][inputId];
 
-  handleSaveDone = accordeon => {};
+    accordeon.goToState(GroupItemType.SAVE, null, currentState);
+    accordeon.setState({ currentState });
+    // IDEA: Works with save data imitation.
+    setTimeout(() => {
+      const { isAccordeonOpen } = accordeon.state.machine;
+      inputId = accordeon.state.inputs.SAVED_DONE;
 
-  // handlePlay(player) {
-  //   const stateId = player.state.currentState;
-  //   const inputId = player.state.inputs.PLAY;
-  //   const currentState = player.state.transitions[stateId][inputId];
+      if (isAccordeonOpen) {
+        stateId =
+          accordeon.state.initialStateCodes[GroupItemType.USUAL_ACCORDEON_OPEN];
+        currentState = accordeon.state.transitions[stateId][inputId];
 
-  //   player.setState({
-  //     currentState: currentState,
-  //   });
-  // }
+        accordeon.setState({ currentState });
+        accordeon.goToState(
+          GroupItemType.USUAL_ACCORDEON_OPEN,
+          valueToSave,
+          currentState,
+        );
+      } else {
+        stateId = accordeon.state.initialStateCodes[GroupItemType.USUAL];
 
-  // handleNext(player) {
-  //   let songId = player.state.currentSong;
-  //   const maxSongs = player.state.songs.length - 1;
-  //   const currentSong = songId === maxSongs ? songId : ++songId;
+        accordeon.setState({ currentState });
+        currentState = accordeon.state.transitions[stateId][inputId];
+        accordeon.goToState(GroupItemType.USUAL, valueToSave, currentState);
+      }
+    }, 1500);
+  };
 
-  //   player.setState({
-  //     currentSong: currentSong,
-  //   });
-  // }
+  handleError = accordeon => {
+    const stateId = accordeon.state.currentState;
+    const inputId = accordeon.state.inputs.SAVED_ERROR;
+    const currentState = accordeon.state.transitions[stateId][inputId];
 
-  // handlePrevious(player) {
-  //   let songId = player.state.currentSong;
-  //   const currentSong = songId === 0 ? songId : --songId;
+    accordeon.setState({ currentState });
 
-  //   player.setState({
-  //     currentSong: currentSong,
-  //   });
-  // }
+    console.error('ERROR: Something went wrong!');
+  };
 
-  // handleStop(player) {
-  //   const stateId = player.state.currentState;
-  //   const inputId = player.state.inputs.STOP;
-  //   const currentState = player.state.transitions[stateId][inputId];
+  handleSaveDone = accordeon => {
+    const stateId = accordeon.state.currentState;
+    const inputId = accordeon.state.inputs.SAVED_DONE;
+    const currentState = accordeon.state.transitions[stateId][inputId];
 
-  //   player.setState({
-  //     currentState: currentState,
-  //     currentSong: 0,
-  //   });
-  // }
+    accordeon.setState({ currentState });
+  };
 }

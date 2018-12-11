@@ -10,6 +10,18 @@ export const enum GroupItemType {
   ERROR = 'ERROR',
 }
 
+export const initialStateNames = [
+  'USUAL',
+  'USUAL_ACCORDEON_OPEN',
+  'HOVER',
+  'HOVER_ACCORDEON_OPEN',
+  'SAVE',
+  'INITIAL',
+  'EDIT',
+  'ADD',
+  'ERROR',
+];
+
 export const initialState = {
   isProcessing: false,
   isEdit: false,

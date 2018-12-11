@@ -37,6 +37,17 @@ interface IGroupItemProps {
 interface IGroupItemState {
   currentState: number;
   states: any;
+  initialStateCodes: {
+    [GroupItemType.USUAL]: number;
+    USUAL_ACCORDEON_OPEN: number;
+    HOVER: number;
+    HOVER_ACCORDEON_OPEN: number;
+    SAVE: number;
+    INITIAL: number;
+    EDIT: number;
+    ADD: number;
+    ERROR: number;
+  };
   inputs: {
     ACCORDEON_OPEN: number;
     HOVER: number;
@@ -115,6 +126,17 @@ export default class GroupItem extends React.Component<
         new AddState(),
         new ErrorState(),
       ],
+      initialStateCodes: {
+        USUAL: 0,
+        USUAL_ACCORDEON_OPEN: 1,
+        HOVER: 2,
+        HOVER_ACCORDEON_OPEN: 3,
+        SAVE: 4,
+        INITIAL: 5,
+        EDIT: 6,
+        ADD: 7,
+        ERROR: 8,
+      },
       inputs: {
         ACCORDEON_OPEN: 0,
         HOVER: 1,
@@ -128,8 +150,8 @@ export default class GroupItem extends React.Component<
       transitions: [
         [1, 2, 0, 0, 0, 0, 0, 0],
         [0, 3, 1, 1, 1, 1, 1, 1],
-        [3, 2, 0, 6, 2, 2, 2, 2],
-        [2, 3, 1, 6, 3, 3, 3, 3],
+        [3, 2, 0, 6, 4, 2, 2, 2],
+        [2, 3, 1, 6, 4, 3, 3, 3],
         [4, 4, 4, 4, 4, 4, 8, 4],
         [5, 5, 5, 5, 5, 0, 5, 7],
         [6, 6, 6, 6, 4, 6, 6, 6],
@@ -146,14 +168,16 @@ export default class GroupItem extends React.Component<
   componentDidMount() {
     const { itemInitialState, initialValue } = this.props;
 
-    this.goToState(itemInitialState, initialValue);
+    this.goToState(itemInitialState, initialValue, 0);
   }
 
   /**
    * State machine binding
    */
-  goToState = (stateName, stateParam) => {
-    this.setState(generateState(this.state, this.props, stateName, stateParam));
+  goToState = (stateName, stateParam, stateCode) => {
+    this.setState(
+      generateState(this.state, this.props, stateName, stateParam, stateCode),
+    );
   };
 
   onAccordeonOpen = () => {
@@ -180,9 +204,13 @@ export default class GroupItem extends React.Component<
     this.state.states[this.state.currentState].handleSave(this, value);
   };
 
-  onError = () => {};
+  onError = () => {
+    this.state.states[this.state.currentState].handleError(this);
+  };
 
-  onSaveDone = () => {};
+  onSaveDone = () => {
+    this.state.states[this.state.currentState].handleSaveDone(this);
+  };
 
   // Transitions
   transitionFromHoverAccordeonOpen = name => {
@@ -190,10 +218,14 @@ export default class GroupItem extends React.Component<
 
     switch (name) {
       case GroupItemType.HOVER:
-        this.goToState(GroupItemType.HOVER_ACCORDEON_OPEN, value);
+        this.goToState(
+          GroupItemType.HOVER_ACCORDEON_OPEN,
+          value,
+          this.state.currentState,
+        );
         break;
       case GroupItemType.HOVER_ACCORDEON_OPEN:
-        this.goToState(GroupItemType.HOVER, value);
+        this.goToState(GroupItemType.HOVER, value, this.state.currentState);
         break;
       default:
         return null;
@@ -205,10 +237,14 @@ export default class GroupItem extends React.Component<
 
     switch (name) {
       case GroupItemType.HOVER:
-        this.goToState(GroupItemType.USUAL, value);
+        this.goToState(GroupItemType.USUAL, value, this.state.currentState);
         break;
       case GroupItemType.HOVER_ACCORDEON_OPEN:
-        this.goToState(GroupItemType.USUAL_ACCORDEON_OPEN, value);
+        this.goToState(
+          GroupItemType.USUAL_ACCORDEON_OPEN,
+          value,
+          this.state.currentState,
+        );
         break;
       default:
         return null;
@@ -220,10 +256,14 @@ export default class GroupItem extends React.Component<
 
     switch (name) {
       case GroupItemType.USUAL:
-        this.goToState(GroupItemType.HOVER, value);
+        this.goToState(GroupItemType.HOVER, value, this.state.currentState);
         break;
       case GroupItemType.USUAL_ACCORDEON_OPEN:
-        this.goToState(GroupItemType.HOVER_ACCORDEON_OPEN, value);
+        this.goToState(
+          GroupItemType.HOVER_ACCORDEON_OPEN,
+          value,
+          this.state.currentState,
+        );
         break;
       default:
         return null;
@@ -233,19 +273,23 @@ export default class GroupItem extends React.Component<
   transitionFromInput = (name, value) => {
     switch (name) {
       case GroupItemType.EDIT:
-        this.goToState(GroupItemType.EDIT, value);
+        this.goToState(GroupItemType.EDIT, value, this.state.currentState);
         break;
       case GroupItemType.ADD:
-        this.goToState(GroupItemType.ADD, value);
+        this.goToState(GroupItemType.ADD, value, this.state.currentState);
         break;
       case GroupItemType.INITIAL:
-        this.goToState(GroupItemType.INITIAL, value);
+        this.goToState(GroupItemType.INITIAL, value, this.state.currentState);
         break;
       case GroupItemType.USUAL:
-        this.goToState(GroupItemType.USUAL, value);
+        this.goToState(GroupItemType.USUAL, value, this.state.currentState);
         break;
       case GroupItemType.USUAL_ACCORDEON_OPEN:
-        this.goToState(GroupItemType.USUAL_ACCORDEON_OPEN, value);
+        this.goToState(
+          GroupItemType.USUAL_ACCORDEON_OPEN,
+          value,
+          this.state.currentState,
+        );
         break;
       default:
         return null;
@@ -255,15 +299,19 @@ export default class GroupItem extends React.Component<
   transitionEscapeFromInput = (name, value) => {
     switch (name) {
       case GroupItemType.ADD:
-        this.goToState(GroupItemType.INITIAL, value);
+        this.goToState(GroupItemType.INITIAL, value, this.state.currentState);
         break;
       case GroupItemType.EDIT:
         const { isAccordeonOpen } = this.state.machine;
 
         if (isAccordeonOpen) {
-          this.goToState(GroupItemType.USUAL_ACCORDEON_OPEN, value);
+          this.goToState(
+            GroupItemType.USUAL_ACCORDEON_OPEN,
+            value,
+            this.state.currentState,
+          );
         } else {
-          this.goToState(GroupItemType.USUAL, value);
+          this.goToState(GroupItemType.USUAL, value, this.state.currentState);
         }
         break;
       default:
@@ -291,11 +339,12 @@ export default class GroupItem extends React.Component<
   // };
 
   handleClickInitial = () => {
-    const { isInitial } = this.state.machine;
+    // const { isInitial } = this.state.machine;
 
-    if (!isInitial) return;
+    // if (!isInitial) return;
 
-    this.goToState(GroupItemType.ADD, null);
+    this.onAddNew();
+    // this.goToState(GroupItemType.ADD, null);
   };
 
   handleClickEdit = () => {

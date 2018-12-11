@@ -1,4 +1,4 @@
-import { GroupItemType, initialState } from './constants';
+import { GroupItemType, initialState, initialStateNames } from './constants';
 
 const MAX_SYMBOLS_IN_NAME = 42;
 
@@ -6,7 +6,13 @@ const MAX_SYMBOLS_IN_NAME = 42;
  * This export function implemented Finite State Machine
  * for internal state of component GroupItem
  */
-export default function generateState(state, props, stateName, stateParam) {
+export default function generateState(
+  state,
+  props,
+  stateName,
+  stateParam,
+  stateCode,
+) {
   const previousState = state ? { ...state.machine } : { ...initialState };
   let stateParamNormalLength = stateParam || '';
 
@@ -17,7 +23,7 @@ export default function generateState(state, props, stateName, stateParam) {
     );
   }
 
-  switch (stateName) {
+  switch (initialStateNames[stateCode]) {
     case GroupItemType.USUAL:
       return {
         name: stateName,
