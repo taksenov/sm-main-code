@@ -35,10 +35,11 @@ export default class EditState {
   };
 
   handleHover = accordeon => {
-    const { isInitial } = accordeon.state.machine;
+    const { isInitial, isAddNew } = accordeon.state.machine;
     // const { name } = accordeon.state;
 
     if (isInitial) return;
+    if (isAddNew) return;
 
     // accordeon.transitionFromUsual(name);
 
@@ -73,10 +74,11 @@ export default class EditState {
   };
 
   handleUnHover = accordeon => {
-    const { isInitial } = accordeon.state.machine;
+    const { isInitial, isAddNew } = accordeon.state.machine;
     // const { name } = accordeon.state;
 
     if (isInitial) return;
+    if (isAddNew) return;
 
     // accordeon.transitionFromHoverAccordeonClose(name);
 
@@ -115,9 +117,20 @@ export default class EditState {
   };
 
   handleEditCancel = (accordeon, valueToSave) => {
+    const { isAddNew } = accordeon.state.machine;
     let stateId = accordeon.state.currentState;
     const inputId = accordeon.state.inputs.EDIT_CANCEL;
     let currentState = accordeon.state.transitions[stateId][inputId];
+
+    if (isAddNew) {
+      stateId = accordeon.state.initialStateCodes[GroupItemType.INITIAL];
+      currentState = accordeon.state.transitions[stateId][inputId];
+
+      accordeon.setState({ currentState });
+      accordeon.goToState(GroupItemType.INITIAL, valueToSave, currentState);
+
+      return;
+    }
 
     // accordeon.goToState(GroupItemType.EDIT, valueToSave, currentState);
     accordeon.setState({
