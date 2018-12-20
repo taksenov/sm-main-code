@@ -58,6 +58,17 @@ export default class UsualState {
     });
   };
 
+  handleEditCancel = (accordeon, valueToSave) => {
+    const stateId = accordeon.state.currentState;
+    const inputId = accordeon.state.inputs.EDIT_LABEL;
+    const currentState = accordeon.state.transitions[stateId][inputId];
+
+    accordeon.goToState(GroupItemType.EDIT, valueToSave, currentState);
+    accordeon.setState({
+      currentState,
+    });
+  };
+
   handleAddNew = accordeon => {
     const { isInitial } = accordeon.state.machine;
     const stateId = accordeon.state.currentState;

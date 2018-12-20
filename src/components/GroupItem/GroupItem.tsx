@@ -57,6 +57,7 @@ interface IGroupItemState {
     SAVED_DONE: number;
     SAVED_ERROR: number;
     ADD_LABEL: number;
+    EDIT_CANCEL: number;
   };
   transitions: any;
   // Old
@@ -146,17 +147,18 @@ export default class GroupItem extends React.Component<
         SAVED_DONE: 5,
         SAVED_ERROR: 6,
         ADD_LABEL: 7,
+        EDIT_CANCEL: 8,
       },
       transitions: [
-        [1, 2, 0, 0, 0, 0, 0, 0],
-        [0, 3, 1, 1, 1, 1, 1, 1],
-        [3, 2, 0, 6, 4, 2, 2, 2],
-        [2, 3, 1, 6, 4, 3, 3, 3],
-        [4, 4, 4, 4, 4, 4, 8, 4],
-        [5, 5, 5, 5, 5, 0, 5, 7],
-        [6, 6, 6, 6, 4, 6, 6, 6],
-        [7, 7, 7, 7, 4, 7, 7, 7],
-        [8, 8, 8, 8, 8, 8, 8, 8],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0],
+        [0, 3, 1, 1, 1, 1, 1, 1, 1],
+        [3, 2, 0, 6, 4, 2, 2, 2, 2],
+        [2, 3, 1, 6, 4, 3, 3, 3, 3],
+        [4, 4, 4, 4, 4, 4, 8, 4, 4],
+        [5, 5, 5, 5, 5, 0, 5, 7, 5],
+        [6, 6, 6, 6, 4, 6, 6, 6, 6],
+        [7, 7, 7, 7, 4, 7, 7, 7, 7],
+        [8, 8, 8, 8, 8, 8, 8, 8, 8],
       ],
       // Old
       name: null,
@@ -194,6 +196,10 @@ export default class GroupItem extends React.Component<
 
   onEdit = value => {
     this.state.states[this.state.currentState].handleEdit(this, value);
+  };
+
+  onEditCancel = value => {
+    this.state.states[this.state.currentState].handleEditCancel(this, value);
   };
 
   onAddNew = () => {
@@ -270,32 +276,6 @@ export default class GroupItem extends React.Component<
     }
   };
 
-  transitionFromInput = (name, value) => {
-    switch (name) {
-      case GroupItemType.EDIT:
-        this.goToState(GroupItemType.EDIT, value, this.state.currentState);
-        break;
-      case GroupItemType.ADD:
-        this.goToState(GroupItemType.ADD, value, this.state.currentState);
-        break;
-      case GroupItemType.INITIAL:
-        this.goToState(GroupItemType.INITIAL, value, this.state.currentState);
-        break;
-      case GroupItemType.USUAL:
-        this.goToState(GroupItemType.USUAL, value, this.state.currentState);
-        break;
-      case GroupItemType.USUAL_ACCORDEON_OPEN:
-        this.goToState(
-          GroupItemType.USUAL_ACCORDEON_OPEN,
-          value,
-          this.state.currentState,
-        );
-        break;
-      default:
-        return null;
-    }
-  };
-
   transitionEscapeFromInput = (name, value) => {
     switch (name) {
       case GroupItemType.ADD:
@@ -320,50 +300,18 @@ export default class GroupItem extends React.Component<
   };
   // State machine binding
 
-  // handleHoverSet = () => {
-  //   const { isInitial } = this.state.machine;
-  //   const { name } = this.state;
-
-  //   if (isInitial) return;
-
-  //   this.transitionFromUsual(name);
-  // };
-
-  // handleHoverUnSet = () => {
-  //   const { isInitial } = this.state.machine;
-  //   const { name } = this.state;
-
-  //   if (isInitial) return;
-
-  //   this.transitionFromHoverAccordeonClose(name);
-  // };
-
   handleClickInitial = () => {
-    // const { isInitial } = this.state.machine;
-
-    // if (!isInitial) return;
-
     this.onAddNew();
-    // this.goToState(GroupItemType.ADD, null);
   };
 
   handleClickEdit = () => {
     const { value } = this.state.machine;
 
     this.onEdit(value);
-    // this.goToState(GroupItemType.EDIT, value);
   };
 
-  // handleClickAccordeonOpen = () => {
-  //   const { name } = this.state;
-
-  //   this.transitionFromHoverAccordeonOpen(name);
-  // };
-
   handleInputChange = e => {
-    const { name } = this.state;
-
-    this.transitionFromInput(name, e.target.value);
+    this.onEdit(e.target.value);
   };
 
   handleInputKeyDown = e => {

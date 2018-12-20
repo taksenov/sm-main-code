@@ -2,47 +2,47 @@
 
  State Table
 
-   | States               | Inputs                                                                                                                                                                                    |
-   |                      |  Click to Acc open/close | Mouse enter          | Mouse leave          | Edit label           | Saving               | When saved done      | When saved error     | Add new label        |
-   |                      |  ACCORDEON_OPEN: 0       | HOVER: 1             | UN_HOVER: 2          | EDIT_LABEL: 3        | SAVING: 4            | SAVED_DONE: 5        | SAVED_ERROR: 6       | ADD_LABEL: 7         |
-   |----------------------|--------------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
- 0 | USUAL                | USUAL_ACCORDEON_OPEN     | HOVER                | USUAL                | USUAL                | USUAL                | USUAL                | USUAL                | USUAL                |
- 1 | USUAL_ACCORDEON_OPEN | USUAL                    | HOVER_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN |
- 2 | HOVER                | HOVER_ACCORDEON_OPEN     | HOVER                | USUAL                | EDIT                 | SAVE                 | HOVER                | HOVER                | HOVER                |
- 3 | HOVER_ACCORDEON_OPEN | HOVER                    | HOVER_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | EDIT                 | SAVE                 | HOVER_ACCORDEON_OPEN | HOVER_ACCORDEON_OPEN | HOVER_ACCORDEON_OPEN |
- 4 | SAVE                 | SAVE                     | SAVE                 | SAVE                 | SAVE                 | SAVE                 | SAVE                 | ERROR                | SAVE                 |
- 5 | INITIAL              | INITIAL                  | INITIAL              | INITIAL              | INITIAL              | INITIAL              | USUAL                | INITIAL              | ADD                  |
- 6 | EDIT                 | EDIT                     | EDIT                 | EDIT                 | EDIT                 | SAVE                 | EDIT                 | EDIT                 | EDIT                 |
- 7 | ADD                  | ADD                      | ADD                  | ADD                  | ADD                  | SAVE                 | ADD                  | ADD                  | ADD                  |
- 8 | ERROR                | ERROR                    | ERROR                | ERROR                | ERROR                | ERROR                | ERROR                | ERROR                | ERROR                |
+   | States               | Inputs                                                                                                                                                                                                           |
+   |                      |  Click to Acc open/close | Mouse enter          | Mouse leave          | Edit label           | Saving               | When saved done      | When saved error     | Add new label        | When Edit Cancel     |
+   |                      |  ACCORDEON_OPEN: 0       | HOVER: 1             | UN_HOVER: 2          | EDIT_LABEL: 3        | SAVING: 4            | SAVED_DONE: 5        | SAVED_ERROR: 6       | ADD_LABEL: 7         | EDIT_CANCEL: 8       |
+   |----------------------|--------------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
+ 0 | USUAL                | USUAL_ACCORDEON_OPEN     | HOVER                | USUAL                | USUAL                | USUAL                | USUAL                | USUAL                | USUAL                | USUAL                |
+ 1 | USUAL_ACCORDEON_OPEN | USUAL                    | HOVER_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN |
+ 2 | HOVER                | HOVER_ACCORDEON_OPEN     | HOVER                | USUAL                | EDIT                 | SAVE                 | HOVER                | HOVER                | HOVER                | HOVER                |
+ 3 | HOVER_ACCORDEON_OPEN | HOVER                    | HOVER_ACCORDEON_OPEN | USUAL_ACCORDEON_OPEN | EDIT                 | SAVE                 | HOVER_ACCORDEON_OPEN | HOVER_ACCORDEON_OPEN | HOVER_ACCORDEON_OPEN | HOVER_ACCORDEON_OPEN |
+ 4 | SAVE                 | SAVE                     | SAVE                 | SAVE                 | SAVE                 | SAVE                 | SAVE                 | ERROR                | SAVE                 | SAVE                 |
+ 5 | INITIAL              | INITIAL                  | INITIAL              | INITIAL              | INITIAL              | INITIAL              | USUAL                | INITIAL              | ADD                  | INITIAL              |
+ 6 | EDIT                 | EDIT                     | EDIT                 | EDIT                 | EDIT                 | SAVE                 | EDIT                 | EDIT                 | EDIT                 | EDIT                 |
+ 7 | ADD                  | ADD                      | ADD                  | ADD                  | ADD                  | SAVE                 | ADD                  | ADD                  | ADD                  | ADD                  |
+ 8 | ERROR                | ERROR                    | ERROR                | ERROR                | ERROR                | ERROR                | ERROR                | ERROR                | ERROR                | ERROR                |
 
 2)
 
-| States | Inputs                                                                                                                         |
-|        | Click to Acc open/close | Mouse enter | Mouse leave | Edit label | Saving | When saved done | When saved error | Add new label |
-|        | onAccordeonOpen         | onHover     | onUnHover   | onEdit     | onSave | onSaveDone      | onError          | onAddNew      |
-|        | 0                       | 1           | 2           | 3          | 4      | 5               | 6                | 7             |
-|--------|-------------------------|-------------|-------------|------------|--------|-----------------|------------------|---------------|
-| 0      | 1                       | 2           | 0           | 0          | 0      | 0               | 0                | 0             |
-| 1      | 0                       | 3           | 1           | 1          | 1      | 1               | 1                | 1             |
-| 2      | 3                       | 2           | 0           | 6          | 4      | 2               | 2                | 2             |
-| 3      | 2                       | 3           | 1           | 6          | 4      | 3               | 3                | 3             |
-| 4      | 4                       | 4           | 4           | 4          | 4      | 4               | 8                | 4             |
-| 5      | 5                       | 5           | 5           | 5          | 5      | 0               | 5                | 7             |
-| 6      | 6                       | 6           | 6           | 6          | 4      | 6               | 6                | 6             |
-| 7      | 7                       | 7           | 7           | 7          | 4      | 7               | 7                | 7             |
-| 8      | 8                       | 8           | 8           | 8          | 8      | 8               | 8                | 8             |
+| States | Inputs                                                                                                                                            |
+|        | Click to Acc open/close | Mouse enter | Mouse leave | Edit label | Saving | When saved done | When saved error | Add new label | When Edit Cancel |
+|        | onAccordeonOpen         | onHover     | onUnHover   | onEdit     | onSave | onSaveDone      | onError          | onAddNew      | onEditCancel     |
+|        | 0                       | 1           | 2           | 3          | 4      | 5               | 6                | 7             | 8                |
+|--------|-------------------------|-------------|-------------|------------|--------|-----------------|------------------|---------------|------------------|
+| 0      | 1                       | 2           | 0           | 0          | 0      | 0               | 0                | 0             | 0                |
+| 1      | 0                       | 3           | 1           | 1          | 1      | 1               | 1                | 1             | 1                |
+| 2      | 3                       | 2           | 0           | 6          | 4      | 2               | 2                | 2             | 2                |
+| 3      | 2                       | 3           | 1           | 6          | 4      | 3               | 3                | 3             | 3                |
+| 4      | 4                       | 4           | 4           | 4          | 4      | 4               | 8                | 4             | 4                |
+| 5      | 5                       | 5           | 5           | 5          | 5      | 0               | 5                | 7             | 5                |
+| 6      | 6                       | 6           | 6           | 6          | 4      | 6               | 6                | 6             | 6                |
+| 7      | 7                       | 7           | 7           | 7          | 4      | 7               | 7                | 7             | 7                |
+| 8      | 8                       | 8           | 8           | 8          | 8      | 8               | 8                | 8             | 8                |
 
 3)
 
 const transitionsTable = [
-  [1, 2, 0, 0, 0, 0, 0, 0],
-  [0, 3, 1, 1, 1, 1, 1, 1],
-  [3, 2, 0, 6, 4, 2, 2, 2],
-  [2, 3, 1, 6, 4, 3, 3, 3],
-  [4, 4, 4, 4, 4, 4, 8, 4],
-  [5, 5, 5, 5, 5, 0, 5, 7],
-  [6, 6, 6, 6, 4, 6, 6, 6],
-  [7, 7, 7, 7, 4, 7, 7, 7],
-  [8, 8, 8, 8, 8, 8, 8, 8],
+  [1, 2, 0, 0, 0, 0, 0, 0, 0],
+  [0, 3, 1, 1, 1, 1, 1, 1, 1],
+  [3, 2, 0, 6, 4, 2, 2, 2, 2],
+  [2, 3, 1, 6, 4, 3, 3, 3, 3],
+  [4, 4, 4, 4, 4, 4, 8, 4, 4],
+  [5, 5, 5, 5, 5, 0, 5, 7, 5],
+  [6, 6, 6, 6, 4, 6, 6, 6, 6],
+  [7, 7, 7, 7, 4, 7, 7, 7, 7],
+  [8, 8, 8, 8, 8, 8, 8, 8, 8],
 ];
