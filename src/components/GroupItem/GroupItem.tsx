@@ -21,14 +21,6 @@ import Preloader from '../Preloader';
 
 import './styles.css';
 
-// TODO: Need in future for currentState
-// inputs: {
-//   [GroupItemType.USUAL]: 0,
-//   [GroupItemType.USUAL_ACCORDEON_OPEN]: 1,
-//   [GroupItemType.HOVER]: 2,
-//   [GroupItemType.HOVER_ACCORDEON_OPEN]: 3,
-// },
-
 interface IGroupItemProps {
   itemInitialState: string;
   initialValue: string;
@@ -218,86 +210,6 @@ export default class GroupItem extends React.Component<
     this.state.states[this.state.currentState].handleSaveDone(this);
   };
 
-  // Transitions
-  transitionFromHoverAccordeonOpen = name => {
-    const { value } = this.state.machine;
-
-    switch (name) {
-      case GroupItemType.HOVER:
-        this.goToState(
-          GroupItemType.HOVER_ACCORDEON_OPEN,
-          value,
-          this.state.currentState,
-        );
-        break;
-      case GroupItemType.HOVER_ACCORDEON_OPEN:
-        this.goToState(GroupItemType.HOVER, value, this.state.currentState);
-        break;
-      default:
-        return null;
-    }
-  };
-
-  transitionFromHoverAccordeonClose = name => {
-    const { value } = this.state.machine;
-
-    switch (name) {
-      case GroupItemType.HOVER:
-        this.goToState(GroupItemType.USUAL, value, this.state.currentState);
-        break;
-      case GroupItemType.HOVER_ACCORDEON_OPEN:
-        this.goToState(
-          GroupItemType.USUAL_ACCORDEON_OPEN,
-          value,
-          this.state.currentState,
-        );
-        break;
-      default:
-        return null;
-    }
-  };
-
-  transitionFromUsual = name => {
-    const { value } = this.state.machine;
-
-    switch (name) {
-      case GroupItemType.USUAL:
-        this.goToState(GroupItemType.HOVER, value, this.state.currentState);
-        break;
-      case GroupItemType.USUAL_ACCORDEON_OPEN:
-        this.goToState(
-          GroupItemType.HOVER_ACCORDEON_OPEN,
-          value,
-          this.state.currentState,
-        );
-        break;
-      default:
-        return null;
-    }
-  };
-
-  transitionEscapeFromInput = (name, value) => {
-    switch (name) {
-      case GroupItemType.ADD:
-        this.goToState(GroupItemType.INITIAL, value, this.state.currentState);
-        break;
-      case GroupItemType.EDIT:
-        const { isAccordeonOpen } = this.state.machine;
-
-        if (isAccordeonOpen) {
-          this.goToState(
-            GroupItemType.USUAL_ACCORDEON_OPEN,
-            value,
-            this.state.currentState,
-          );
-        } else {
-          this.goToState(GroupItemType.USUAL, value, this.state.currentState);
-        }
-        break;
-      default:
-        return null;
-    }
-  };
   // State machine binding
 
   handleClickInitial = () => {
@@ -315,7 +227,6 @@ export default class GroupItem extends React.Component<
   };
 
   handleInputKeyDown = e => {
-    const { name } = this.state;
     const { value } = this.state.machine;
 
     if (e.keyCode === 13) {
@@ -323,7 +234,7 @@ export default class GroupItem extends React.Component<
 
       this.onSave(e.target.value);
     } else if (e.keyCode === 27) {
-      this.transitionEscapeFromInput(name, value);
+      this.onEditCancel(value);
     }
   };
 
@@ -362,9 +273,7 @@ export default class GroupItem extends React.Component<
         <div
           className={'wrapper'}
           onMouseEnter={this.onHover}
-          // onMouseEnter={this.handleHoverSet}
           onMouseLeave={this.onUnHover}
-          // onMouseLeave={this.handleHoverUnSet}
           onClick={this.handleClickInitial}
         >
           <div className={'itemLabel'}>
@@ -376,14 +285,12 @@ export default class GroupItem extends React.Component<
             {isUsual && (
               <AccordeonSwitcher
                 handleClickAccordeonOpen={this.onAccordeonOpen}
-                // handleClickAccordeonOpen={this.handleClickAccordeonOpen}
                 isAccordeonOpen={isAccordeonOpen}
               />
             )}
             {isHover && (
               <AccordeonSwitcher
                 handleClickAccordeonOpen={this.onAccordeonOpen}
-                // handleClickAccordeonOpen={this.handleClickAccordeonOpen}
                 isAccordeonOpen={isAccordeonOpen}
               />
             )}

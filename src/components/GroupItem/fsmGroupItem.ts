@@ -1,4 +1,8 @@
-import { GroupItemType, initialState, initialStateNames } from './constants';
+import {
+  GroupItemType,
+  initialState,
+  // initialStateNames
+} from './constants';
 
 const MAX_SYMBOLS_IN_NAME = 42;
 
@@ -23,7 +27,7 @@ export default function generateState(
     );
   }
 
-  switch (initialStateNames[stateCode]) {
+  switch (stateName) {
     case GroupItemType.USUAL:
       return {
         name: stateName,

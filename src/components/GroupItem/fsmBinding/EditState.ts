@@ -2,45 +2,107 @@ import { GroupItemType } from '../constants';
 
 export default class EditState {
   handleAccordeonOpen = accordeon => {
-    const { name } = accordeon.state;
-    accordeon.transitionFromHoverAccordeonOpen(name);
+    // const { name } = accordeon.state;
+    // accordeon.transitionFromHoverAccordeonOpen(name);
 
     // TODO: Use destructurization
-    const stateId = accordeon.state.currentState;
+    let stateId = accordeon.state.currentState;
     const inputId = accordeon.state.inputs.ACCORDEON_OPEN;
-    const currentState = accordeon.state.transitions[stateId][inputId];
+    let currentState = accordeon.state.transitions[stateId][inputId];
 
-    accordeon.setState({ currentState });
+    const { isAccordeonOpen, value } = accordeon.state.machine;
+
+    if (isAccordeonOpen) {
+      stateId = accordeon.state.initialStateCodes[GroupItemType.HOVER];
+      currentState = accordeon.state.transitions[stateId][inputId];
+
+      accordeon.setState({ currentState });
+      accordeon.goToState(GroupItemType.HOVER, value, currentState);
+    } else {
+      stateId =
+        accordeon.state.initialStateCodes[GroupItemType.HOVER_ACCORDEON_OPEN];
+
+      accordeon.setState({ currentState });
+      currentState = accordeon.state.transitions[stateId][inputId];
+      accordeon.goToState(
+        GroupItemType.HOVER_ACCORDEON_OPEN,
+        value,
+        currentState,
+      );
+    }
+
+    // accordeon.setState({ currentState });
   };
 
   handleHover = accordeon => {
     const { isInitial } = accordeon.state.machine;
-    const { name } = accordeon.state;
+    // const { name } = accordeon.state;
 
     if (isInitial) return;
 
-    accordeon.transitionFromUsual(name);
+    // accordeon.transitionFromUsual(name);
 
-    const stateId = accordeon.state.currentState;
+    let stateId = accordeon.state.currentState;
     const inputId = accordeon.state.inputs.HOVER;
-    const currentState = accordeon.state.transitions[stateId][inputId];
+    let currentState = accordeon.state.transitions[stateId][inputId];
 
-    accordeon.setState({ currentState });
+    // accordeon.setState({
+    //   currentState,
+    // });
+
+    const { isAccordeonOpen, value } = accordeon.state.machine;
+
+    if (isAccordeonOpen) {
+      stateId =
+        accordeon.state.initialStateCodes[GroupItemType.HOVER_ACCORDEON_OPEN];
+      currentState = accordeon.state.transitions[stateId][inputId];
+
+      accordeon.setState({ currentState });
+      accordeon.goToState(
+        GroupItemType.HOVER_ACCORDEON_OPEN,
+        value,
+        currentState,
+      );
+    } else {
+      stateId = accordeon.state.initialStateCodes[GroupItemType.HOVER];
+
+      accordeon.setState({ currentState });
+      currentState = accordeon.state.transitions[stateId][inputId];
+      accordeon.goToState(GroupItemType.HOVER, value, currentState);
+    }
   };
 
   handleUnHover = accordeon => {
     const { isInitial } = accordeon.state.machine;
-    const { name } = accordeon.state;
+    // const { name } = accordeon.state;
 
     if (isInitial) return;
 
-    accordeon.transitionFromHoverAccordeonClose(name);
+    // accordeon.transitionFromHoverAccordeonClose(name);
 
-    const stateId = accordeon.state.currentState;
+    let stateId = accordeon.state.currentState;
     const inputId = accordeon.state.inputs.UN_HOVER;
-    const currentState = accordeon.state.transitions[stateId][inputId];
+    let currentState = accordeon.state.transitions[stateId][inputId];
+    const { isAccordeonOpen, value } = accordeon.state.machine;
 
-    accordeon.setState({ currentState });
+    if (isAccordeonOpen) {
+      stateId =
+        accordeon.state.initialStateCodes[GroupItemType.USUAL_ACCORDEON_OPEN];
+      currentState = accordeon.state.transitions[stateId][inputId];
+
+      accordeon.setState({ currentState });
+      accordeon.goToState(
+        GroupItemType.USUAL_ACCORDEON_OPEN,
+        value,
+        currentState,
+      );
+    } else {
+      stateId = accordeon.state.initialStateCodes[GroupItemType.USUAL];
+
+      accordeon.setState({ currentState });
+      currentState = accordeon.state.transitions[stateId][inputId];
+      accordeon.goToState(GroupItemType.USUAL, value, currentState);
+    }
   };
 
   handleEdit = (accordeon, valueToSave) => {
@@ -50,6 +112,38 @@ export default class EditState {
 
     accordeon.goToState(GroupItemType.EDIT, valueToSave, currentState);
     accordeon.setState({ currentState });
+  };
+
+  handleEditCancel = (accordeon, valueToSave) => {
+    let stateId = accordeon.state.currentState;
+    const inputId = accordeon.state.inputs.EDIT_CANCEL;
+    let currentState = accordeon.state.transitions[stateId][inputId];
+
+    // accordeon.goToState(GroupItemType.EDIT, valueToSave, currentState);
+    accordeon.setState({
+      currentState,
+    });
+    const { isAccordeonOpen } = accordeon.state.machine;
+    // inputId = accordeon.state.inputs.SAVED_DONE;
+
+    if (isAccordeonOpen) {
+      stateId =
+        accordeon.state.initialStateCodes[GroupItemType.USUAL_ACCORDEON_OPEN];
+      currentState = accordeon.state.transitions[stateId][inputId];
+
+      accordeon.setState({ currentState });
+      accordeon.goToState(
+        GroupItemType.USUAL_ACCORDEON_OPEN,
+        valueToSave,
+        currentState,
+      );
+    } else {
+      stateId = accordeon.state.initialStateCodes[GroupItemType.USUAL];
+
+      accordeon.setState({ currentState });
+      currentState = accordeon.state.transitions[stateId][inputId];
+      accordeon.goToState(GroupItemType.USUAL, valueToSave, currentState);
+    }
   };
 
   handleAddNew = accordeon => {
