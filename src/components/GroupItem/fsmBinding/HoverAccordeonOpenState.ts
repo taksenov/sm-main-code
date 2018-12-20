@@ -35,11 +35,12 @@ export default class HoverAccordeonOpenState {
   };
 
   handleHover = accordeon => {
-    const { isInitial, isAddNew } = accordeon.state.machine;
+    const { isInitial, isAddNew, isEdit } = accordeon.state.machine;
     // const { name } = accordeon.state;
 
     if (isInitial) return;
     if (isAddNew) return;
+    if (isEdit) return;
 
     // accordeon.transitionFromUsual(name);
 
@@ -74,11 +75,12 @@ export default class HoverAccordeonOpenState {
   };
 
   handleUnHover = accordeon => {
-    const { isInitial, isAddNew } = accordeon.state.machine;
+    const { isInitial, isAddNew, isEdit } = accordeon.state.machine;
     // const { name } = accordeon.state;
 
     if (isInitial) return;
     if (isAddNew) return;
+    if (isEdit) return;
 
     // accordeon.transitionFromHoverAccordeonClose(name);
 
