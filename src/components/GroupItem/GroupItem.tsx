@@ -131,6 +131,7 @@ export default class GroupItem extends React.Component<
         ERROR: 8,
       },
       inputs: {
+        // ACCORDEON_OPEN: '0qwer',
         ACCORDEON_OPEN: 0,
         HOVER: 1,
         UN_HOVER: 2,

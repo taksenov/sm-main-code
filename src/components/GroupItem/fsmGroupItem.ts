@@ -35,6 +35,7 @@ export default function generateState(
           isProcessing: false,
           isEdit: false,
           isHover: false,
+          // isUsual: 123,
           isUsual: true,
           isInitial: false,
           isAccordeonOpen: false,
